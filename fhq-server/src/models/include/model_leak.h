@@ -8,12 +8,14 @@ class ModelLeak {
     public:
         ModelLeak();
         
-        int id();
-        void setId(int nId);
+        int localId();
+        void setLocalId(int nId);
         const std::string &uuid();
         void setUuid(std::string sUuid);
-        int gameId();
-        void setGameId(int nGameId);
+        int gameId(); // deprecated
+        void setGameId(int nGameId); // deprecated
+        const std::string &gameUuid();
+        void setGameUuid(std::string nGameUuid);
         const std::string &name();
         void setName(std::string sName);
         const std::string &content();
@@ -28,12 +30,13 @@ class ModelLeak {
         void setSold(int nSold);
         
         nlohmann::json toJson();
-        
+        void fillFrom(nlohmann::json &jsonLeak);
     private:
         std::string TAG;
-        int m_nId;
+        int m_nLocalId;
+        int m_nGameId; // deprecated
         std::string m_sUuid;
-        int m_nGameId;
+        std::string m_sGameUuid;
         std::string m_sName;
         std::string m_sContent;
         int m_nScore;

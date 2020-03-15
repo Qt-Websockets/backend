@@ -1,3 +1,5 @@
+dckr_mysql/*
+data_travis/logs/*.log
 # Compiled Object files
 *.slo
 *.lo
@@ -36,6 +38,7 @@ Makefile
 tmp/*
 tmpdeb/*
 conf.ini
+cmake-build-debug/
 freehackquest-backend
 
 var/log/freehackquest-backend/errors/*
@@ -54,6 +57,7 @@ freehackquest-backend.pro.user
 .qmake.stash
 .DS_Store
 fhq-server/build
+fhq-server/builds
 fhq-server/fhq-server
 fhq-server/debian/files
 fhq-server/fhq-server.pro.user
@@ -62,4 +66,13 @@ tmpdeb
 install/DOXYGEN/html/*
 CMakeLists.txt.user
 .vscode
-fhq-server/libfhqcli-py
+fhq-server/libfreehackquest-client-py
+fhq-server/libfhqcli-web-js
+fhq-server/libfhqcli-java-android
+tests/libfhqcli.py
+tests/libfhqcli/*
+
+fhq-server-build/
+tests/get-pip.py
+fhq-server/fhq-server.debian95
+.idea
