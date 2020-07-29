@@ -1,15 +1,17 @@
 #ifndef EMPLOY_NOTIFY_H
 #define EMPLOY_NOTIFY_H
 
-#include <wsjcpp_employees.h>
+#include <employees.h>
 #include <model_notification.h>
 
-class EmployNotify : public WSJCppEmployBase {
+class EmployNotify : public WsjcppEmployBase {
     public:
 
         EmployNotify();
         static std::string name() { return "EmployNotify"; }
         virtual bool init();
+        virtual bool deinit();
+        
         static std::string GAMES;
         static std::string QUESTS;
         static std::string USERS;

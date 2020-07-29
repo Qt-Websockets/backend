@@ -2,9 +2,9 @@
 #define UNIT_TEST_STORAGE_STRUCT_H
 
 #include <wsjcpp_unit_tests.h>
-#include <core/storages.h>
+#include <wsjcpp_storages.h>
 
-class UnitTestStorageStruct : public WSJCppUnitTestBase {
+class UnitTestStorageStruct : public WsjcppUnitTestBase {
     public:
         UnitTestStorageStruct();
         virtual void init();
@@ -12,14 +12,14 @@ class UnitTestStorageStruct : public WSJCppUnitTestBase {
 
     private:
 
-        void createTestTable0(bool &bTestSuccess, Storage *pStorage);
-        void dropTestTable0(bool &bTestSuccess, Storage *pStorage);
-        void createTestTable1(bool &bTestSuccess, Storage *pStorage);
-        void modifyTestTable1(bool &bTestSuccess, Storage *pStorage);
-        void checkModifiedTable1(bool &bTestSuccess, Storage *pStorage);
-        void insertTestTable1(bool &bTestSuccess, Storage *pStorage);
-        void createTestTable3(bool &bTestSuccess, Storage *pStorage);
-        void modifyTestTable3(bool &bTestSuccess, Storage *pStorage);
+        void createTestTable0(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void dropTestTable0(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void createTestTable1(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void modifyTestTable1(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void checkModifiedTable1(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void insertTestTable1(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void createTestTable3(bool &bTestSuccess, WsjcppStorage *pStorage);
+        void modifyTestTable3(bool &bTestSuccess, WsjcppStorage *pStorage);
 
 };
 

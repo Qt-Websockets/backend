@@ -11,7 +11,7 @@ REGISTRY_WJSCPP_EMPLOY(EmployQuests)
 // ---------------------------------------------------------------------
 
 EmployQuests::EmployQuests()
-    : WSJCppEmployBase(EmployQuests::name(), {EmployDatabase::name()}) {
+    : WsjcppEmployBase(EmployQuests::name(), {EmployDatabase::name()}) {
     TAG = EmployQuests::name();
 }
 
@@ -19,14 +19,14 @@ EmployQuests::EmployQuests()
 
 bool EmployQuests::init() {
     
-    EmployDatabase *pDatabase = findEmploy<EmployDatabase>();
+    EmployDatabase *pDatabase = findWsjcppEmploy<EmployDatabase>();
     QSqlDatabase db = *(pDatabase->database());
     QSqlQuery query(db);
     query.prepare("SELECT subject, COUNT(*) as cnt FROM `quest` WHERE quest.state = :state GROUP BY subject");
     query.bindValue(":state", "open");
 
     if (!query.exec()) {
-        WSJCppLog::err(TAG, query.lastError().text().toStdString());
+        WsjcppLog::err(TAG, query.lastError().text().toStdString());
         return false;
     }
 
@@ -37,6 +37,13 @@ bool EmployQuests::init() {
         int nCount = record.value("cnt").toInt();
         m_mapQuestsSubjects.insert(std::pair<std::string, int>(sSubject, nCount));
     }
+    return true;
+}
+
+// ---------------------------------------------------------------------
+
+bool EmployQuests::deinit() {
+    // TODO
     return true;
 }
 

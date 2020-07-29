@@ -1,12 +1,72 @@
-<h1 l10nTranslate>security</h1>
-
-<div class="row">
-  <div class="col-lg-2">
-    <app-user-profile-menu></app-user-profile-menu>
-  </div>
-  <div class="col-lg-10">
-    <app-user-location></app-user-location>
-    <br>
-    <app-user-change-password></app-user-change-password>
-  </div>
+<div class="alert alert-danger" *ngIf="userId == 0">
+  Please authorize
+  <div class="btn btn-primary" (click)="openDialogSignIn()" l10nTranslate>signin</div>
 </div>
+
+<mat-drawer-container class="user-profile-container" autosize>
+  <mat-drawer mode="side" opened>
+    <app-user-profile-menu></app-user-profile-menu>
+  </mat-drawer>
+  <mat-drawer-content class="user-profile-drawer-content">
+    <h1 l10nTranslate>security</h1>
+
+    <mat-card *ngIf="userId != 0">
+      <mat-card-header>
+        <mat-card-title l10nTranslate>userLocation</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p *ngIf="userCountry == '' && userRegion == '' && userCity == '' && userLastIp == ''" l10nTranslate>notDetected
+        </p>
+        <div *ngIf="userLastIp != ''">
+          <div class="d-inline-block" l10nTranslate>userLastIp</div> {{ userLastIp }}
+        </div>
+        <div *ngIf="userCountry != ''">
+          <div class="d-inline-block" l10nTranslate>userCountry</div> {{ userCountry }}
+        </div>
+        <div *ngIf="userRegion != ''">
+          <div class="d-inline-block" l10nTranslate>userRegion</div> {{ userRegion }}
+        </div>
+        <div *ngIf="userCity != ''">
+          <div class="d-inline-block" l10nTranslate>userCity</div> {{ userCity }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="userId != 0" class="user-profile-item-card-list">
+      <mat-card-header>
+        <mat-card-title l10nTranslate>changePassword</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="example-form">
+          <mat-form-field class="example-full-width" l10nTranslate>
+            <input matInput
+              autocomplete="off" 
+              l10n-placeholder 
+              placeholder="oldPassword" 
+              [formControl]="oldPasswordFormControl"
+              type="password"
+            >
+            <mat-error *ngIf="oldPasswordFormControl.hasError('required')">
+              Old Password <strong>required</strong>
+            </mat-error>
+          </mat-form-field> <br>
+          <mat-form-field class="example-full-width" l10nTranslate>
+            <input matInput 
+              autocomplete="off" 
+              l10n-placeholder 
+              placeholder="newPassword" 
+              [formControl]="newPasswordFormControl"
+              type="password"
+            >
+            <mat-error *ngIf="newPasswordFormControl.hasError('required')">
+              New Password <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <br/><br/>
+          <button mat-raised-button color="warn" (click)="doChangePassword()" l10nTranslate>changePassword</button>
+          <br/><br/>
+          <div class="alert alert-danger" *ngIf="resultOfChangePassword != null">{{ resultOfChangePassword }}</div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer-content>
+</mat-drawer-container>

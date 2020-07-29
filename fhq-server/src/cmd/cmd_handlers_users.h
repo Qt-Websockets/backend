@@ -230,6 +230,26 @@ class CmdHandlerUsersChangeEmailVerification : public CmdHandlerBase {
         virtual void handle(ModelRequest *pRequest);
 };
 
-REGISTRY_CMD(CmdHandlerUsersChangeEmailVerification)
+
+/*********************************************
+ * List of user tokens
+**********************************************/
+ 
+class CmdHandlerUsersTokens : public CmdHandlerBase {
+    public:
+        CmdHandlerUsersTokens();
+        virtual void handle(ModelRequest *pRequest);
+};
+
+
+/*********************************************
+ * Delete user tokens
+**********************************************/
+ 
+class CmdHandlerUsersTokensDelete : public CmdHandlerBase {
+    public:
+        CmdHandlerUsersTokensDelete();
+        virtual void handle(ModelRequest *pRequest);
+};
 
 #endif // CMD_HADNLERS_USERS_H

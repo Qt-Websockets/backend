@@ -1,5 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {
+  MatButtonModule,
+  MatFormFieldModule, 
+  MatInputModule,
+  MatIconModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatCardModule,
+  MatDividerModule,
+  MatListModule,
+  MatSidenavModule,
+  MatProgressBarModule,
+  MatSnackBarModule,
+  MatBadgeModule,
+  MatChipsModule,
+  MatRippleModule
+} from '@angular/material';
+
+// import {MatSidenavModule} from '@angular/material/sidenav';
+
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,12 +52,10 @@ import { ConfidencialComponent } from './pages/confidencial/confidencial.compone
 import { KnowledgeBaseComponent } from './pages/knowledge-base/knowledge-base.component';
 import { ModalDialogSignInComponent } from './dialogs/modal-dialog-sign-in/modal-dialog-sign-in.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { UserProfileMenuComponent } from './pages/user-profile-menu/user-profile-menu.component';
 import { AboutComponent } from './pages/about/about.component';
 import { QuestProposalComponent } from './pages/quest-proposal/quest-proposal.component';
-import { UserChangePasswordComponent } from './pages/user-change-password/user-change-password.component';
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 import { AceModule } from 'ngx-ace-wrapper';
 import { ACE_CONFIG } from 'ngx-ace-wrapper';
@@ -46,7 +64,6 @@ import hljs from 'highlight.js';
 import { ScoreboardComponent } from './pages/scoreboard/scoreboard.component';
 import { QuestsComponent } from './pages/quests/quests.component';
 import { QuestsBySubjectComponent } from './pages/quests-by-subject/quests-by-subject.component';
-import { UserLocationComponent } from './pages/user-location/user-location.component';
 import { UserSecurityComponent } from './pages/user-security/user-security.component';
 import { QuestComponent } from './pages/quest/quest.component';
 import { ModalDialogQuestFeedbackComponent } from './dialogs/modal-dialog-quest-feedback/modal-dialog-quest-feedback.component';
@@ -55,7 +72,9 @@ import { UserSkillsComponent } from './pages/user-skills/user-skills.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { NgxMdModule } from 'ngx-md';
 import { FhqJuryAdComponent } from './pages/fhq-jury-ad/fhq-jury-ad.component';
-import { SimplemdeModule } from 'ng2-simplemde'
+import { SimplemdeModule } from 'ng2-simplemde';
+import { UserTokensComponent } from './pages/user-tokens/user-tokens.component';
+import { UserFavoritesUsefulLinksComponent } from './pages/user-favorites-useful-links/user-favorites-useful-links.component'
 
 /*import hljs from 'highlight.js/lib/highlight';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -112,19 +131,19 @@ const l10nConfig: L10nConfig = {
     UserProfileComponent,
     AboutComponent,
     QuestProposalComponent,
-    UserChangePasswordComponent,
     ScoreboardComponent,
     QuestsComponent,
     QuestsBySubjectComponent,
     UserProfileMenuComponent,
-    UserLocationComponent,
     UserSecurityComponent,
     QuestComponent,
     ModalDialogQuestFeedbackComponent,
     BlockContactUsComponent,
     UserSkillsComponent,
     WelcomeComponent,
-    FhqJuryAdComponent
+    FhqJuryAdComponent,
+    UserTokensComponent,
+    UserFavoritesUsefulLinksComponent
   ],
   imports: [
     BrowserModule,
@@ -140,9 +159,38 @@ const l10nConfig: L10nConfig = {
     LMarkdownEditorModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
     NgxMdModule.forRoot(),
-    SimplemdeModule.forRoot()
+    SimplemdeModule.forRoot(),
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatDividerModule,
+    MatListModule,
+    MatSidenavModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatBadgeModule,
+    MatChipsModule,
+    MatRippleModule
+  ],
+  exports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatDividerModule,
+    MatListModule,
+    MatSidenavModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatRippleModule
   ],
   providers: [
     {

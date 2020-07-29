@@ -11,7 +11,7 @@ REGISTRY_WJSCPP_EMPLOY(EmployScoreboard)
 // ---------------------------------------------------------------------
 
 EmployScoreboard::EmployScoreboard()
-    : WSJCppEmployBase(EmployScoreboard::name(), {EmployDatabase::name()}) {
+    : WsjcppEmployBase(EmployScoreboard::name(), {EmployDatabase::name()}) {
 
 }
 
@@ -23,8 +23,15 @@ bool EmployScoreboard::init() {
 
 // ---------------------------------------------------------------------
 
+bool EmployScoreboard::deinit() {
+    // TODO
+    return true;
+}
+
+// ---------------------------------------------------------------------
+
 void EmployScoreboard::loadSync() {
-    EmployDatabase *pDatabase = findEmploy<EmployDatabase>();
+    EmployDatabase *pDatabase = findWsjcppEmploy<EmployDatabase>();
 
     QSqlDatabase db = *(pDatabase->database());
     m_vRows.clear(); // TODO fix memory leaks

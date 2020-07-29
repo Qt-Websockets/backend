@@ -4,8 +4,8 @@ project(fhq-server)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src.wsjcpp/CMakeLists.txt)
 
-add_definitions(-DFHQSRV_VERSION="0.2.25")
-add_definitions(-DFHQSRV_APP_NAME="fhq-server")
+#### BEGIN_WSJCPP_APPEND
+#### END_WSJCPP_APPEND
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_CXX_STANDARD 11)
@@ -47,12 +47,10 @@ list (APPEND WSJCPP_SOURCES "src/core/fallen.h")
 list (APPEND WSJCPP_SOURCES "src/core/fallen.cpp")
 list (APPEND WSJCPP_SOURCES "src/core/jobs_pool.h")
 list (APPEND WSJCPP_SOURCES "src/core/jobs_pool.cpp")
-list (APPEND WSJCPP_SOURCES "src/core/storages.h")
-list (APPEND WSJCPP_SOURCES "src/core/storages.cpp")
 list (APPEND WSJCPP_SOURCES "src/core/websocketserver.h")
 list (APPEND WSJCPP_SOURCES "src/core/websocketserver.cpp")
-list (APPEND WSJCPP_SOURCES "src/core/wsjcpp_employees.h")
-list (APPEND WSJCPP_SOURCES "src/core/wsjcpp_employees.cpp")
+list (APPEND WSJCPP_SOURCES "src/core/employees.h")
+list (APPEND WSJCPP_SOURCES "src/core/employees.cpp")
 list (APPEND WSJCPP_SOURCES "src/core/wsjcpp_export_libcli_web_js.h")
 list (APPEND WSJCPP_SOURCES "src/core/wsjcpp_export_libcli_web_js.cpp")
 
@@ -137,8 +135,6 @@ list (APPEND WSJCPP_SOURCES "src/storages/mysql/mysql_storage.cpp")
 list (APPEND WSJCPP_SOURCES "src/storages/mysql/mysql_storage.h")
 
 # utils
-list (APPEND WSJCPP_SOURCES "src/utils/utils_merge_text.h")
-list (APPEND WSJCPP_SOURCES "src/utils/utils_merge_text.cpp")
 list (APPEND WSJCPP_SOURCES "src/utils/utils_prepare_deb_package.h")
 list (APPEND WSJCPP_SOURCES "src/utils/utils_prepare_deb_package.cpp")
 list (APPEND WSJCPP_SOURCES "src/utils/utils_static_analizing_text.h")
@@ -201,6 +197,12 @@ list (APPEND WSJCPP_SOURCES "src/storages/updates/update_u0100_mhd92m15nb.h")
 list (APPEND WSJCPP_SOURCES "src/storages/updates/update_u0100_mhd92m15nb.cpp")
 list (APPEND WSJCPP_SOURCES "src/storages/updates/update_mhd92m15nb_snwxenqco0.h")
 list (APPEND WSJCPP_SOURCES "src/storages/updates/update_mhd92m15nb_snwxenqco0.cpp")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_snwxenqco0_csww6lwcrp.h")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_snwxenqco0_csww6lwcrp.cpp")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_csww6lwcrp_722kt134lq.h")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_csww6lwcrp_722kt134lq.cpp")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_722kt134lq_6c8d4zm6u2.h")
+list (APPEND WSJCPP_SOURCES "src/storages/updates/update_722kt134lq_6c8d4zm6u2.cpp")
 list (APPEND WSJCPP_SOURCES "src/storages/updates/update0101.h")
 list (APPEND WSJCPP_SOURCES "src/storages/updates/update0101.cpp")
 
@@ -217,7 +219,7 @@ list (APPEND WSJCPP_SOURCES "src/main.cpp")
 
 ############################
 #####
-#foreach (_headerFile ${FHQSRV_HEADERS})
+#foreach (_headerFile ${WSJCPP_HEADERS})
 #    get_filename_component(_dir ${_headerFile} PATH)
 #    list (APPEND WSJCPP_INCLUDE_DIRS ${_dir})
 #endforeach()

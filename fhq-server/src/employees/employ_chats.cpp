@@ -14,13 +14,20 @@ REGISTRY_WJSCPP_EMPLOY(EmployChats)
 // ---------------------------------------------------------------------
 
 EmployChats::EmployChats()
-    : WSJCppEmployBase(EmployChats::name(), {EmployDatabase::name(), EmployNotify::name()}) {
+    : WsjcppEmployBase(EmployChats::name(), {EmployDatabase::name(), EmployNotify::name()}) {
     TAG = EmployChats::name();
 }
 
 // ---------------------------------------------------------------------
 
 bool EmployChats::init() {
+    // TODO
+    return true;
+}
+
+// ---------------------------------------------------------------------
+
+bool EmployChats::deinit() {
     // TODO
     return true;
 }

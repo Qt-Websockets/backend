@@ -1,9 +1,9 @@
 #ifndef EMPLOY_IMAGES_H
 #define EMPLOY_IMAGES_H
 
-#include <wsjcpp_employees.h>
+#include <employees.h>
 
-class EmployImages : public WSJCppEmployBase {
+class EmployImages : public WsjcppEmployBase {
 private:
     std::string TAG;
     
@@ -21,6 +21,7 @@ public:
     };*/
     static std::string name() { return "EmployImages"; }
     virtual bool init();
+    virtual bool deinit();
     bool doThumbnailImagePng(const std::string &sourceFilepath, const std::string &targetFilepath, int width_resize, int height_resize);
 
 };

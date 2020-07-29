@@ -1,16 +1,17 @@
 #ifndef EMPLOY_SERVER_INFO_H
 #define EMPLOY_SERVER_INFO_H
 
-#include <wsjcpp_employees.h>
+#include <employees.h>
 #include <QMutex>
 #include <QDateTime>
 #include <QMap>
 
-class EmployServerInfo : public WSJCppEmployBase {
+class EmployServerInfo : public WsjcppEmployBase {
     public:
         EmployServerInfo();
         static std::string name() { return "EmployServerInfo"; }
         virtual bool init();
+        virtual bool deinit() override;
 
         void incrementRequests(const std::string &cmd);
         void serverStarted();

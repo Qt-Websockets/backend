@@ -1,10 +1,10 @@
 #include <storages/mysql/mysql_storage.h>
-#include <core/fallen.h>
+#include <wsjcpp_parse_conf.h>
 #include <mysql/mysql.h>
 
-REGISTRY_STORAGE(MySqlStorage)
+REGISTRY_WSJCPP_STORAGE(MySqlStorage)
 
-MySqlStorageConnection::MySqlStorageConnection(MYSQL *pConn, Storage *pStorage) : StorageConnection() {
+MySqlStorageConnection::MySqlStorageConnection(MYSQL *pConn, WsjcppStorage *pStorage) : WsjcppStorageConnection() {
     m_pConnection = pConn;
     m_pStorage = pStorage;
     TAG = "MySqlStorageConenction";
@@ -22,14 +22,14 @@ MySqlStorageConnection::~MySqlStorageConnection() {
 bool MySqlStorageConnection::executeQuery(const std::string &sQuery) {
     // TODO statistics time
     std::lock_guard<std::mutex> lock(m_mtxConn);
-    // WSJCppLog::info(TAG, "Try " + sQuery);
+    // WsjcppLog::info(TAG, "Try " + sQuery);
     if (mysql_query(m_pConnection, sQuery.c_str())) {
-        WSJCppLog::err(TAG, "Problem on executeQuery \r\nQuery: " + sQuery);
+        WsjcppLog::err(TAG, "Problem on executeQuery \r\nQuery: " + sQuery);
         std::string sError(mysql_error(m_pConnection));
-        WSJCppLog::err(TAG, "executeQuery error " + sError);
+        WsjcppLog::err(TAG, "executeQuery error " + sError);
         return false;
     } else {
-        // WSJCppLog::ok(TAG, "" + sQuery);
+        // WsjcppLog::ok(TAG, "" + sQuery);
     }
     return true;
 }
@@ -45,7 +45,7 @@ std::string MySqlStorageConnection::lastDatabaseVersion() {
     if (mysql_query(m_pConnection, sQuery.c_str())) {
         std::string sError(mysql_error(m_pConnection));
         if (sError.find("updates' doesn't exist") != std::string::npos) {
-            WSJCppLog::warn(TAG, "Creating table updates .... ");
+            WsjcppLog::warn(TAG, "Creating table updates .... ");
             std::string sTableDbUpdates = 
                 "CREATE TABLE IF NOT EXISTS updates ("
                 "  id INT NOT NULL AUTO_INCREMENT,"
@@ -56,15 +56,15 @@ std::string MySqlStorageConnection::lastDatabaseVersion() {
                 ") ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
             if (mysql_query(m_pConnection, sTableDbUpdates.c_str())) {
                 std::string sError2(mysql_error(m_pConnection));
-                WSJCppLog::err(TAG, "Problem on create table updates " + sError2);
+                WsjcppLog::err(TAG, "Problem on create table updates " + sError2);
                 return "error";
             } else {
-                WSJCppLog::ok(TAG, "Table updates success created");
+                WsjcppLog::ok(TAG, "Table updates success created");
                 sLastVersion = "";
                 return "";
             }
         } else {
-            WSJCppLog::err(TAG, "Problem with database " + sError);
+            WsjcppLog::err(TAG, "Problem with database " + sError);
             return "error";
         }
     } else {
@@ -90,7 +90,7 @@ std::vector<std::string> MySqlStorageConnection::getInstalledVersions() {
     if (mysql_query(m_pConnection, sQuery.c_str())) {
         std::string sError(mysql_error(m_pConnection));
         if (sError.find("updates' doesn't exist") != std::string::npos) {
-            WSJCppLog::warn(TAG, "Creating table updates .... ");
+            WsjcppLog::warn(TAG, "Creating table updates .... ");
             std::string sTableDbUpdates = 
                 "CREATE TABLE IF NOT EXISTS updates ("
                 "  id INT NOT NULL AUTO_INCREMENT,"
@@ -101,13 +101,13 @@ std::vector<std::string> MySqlStorageConnection::getInstalledVersions() {
                 ") ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
             if (mysql_query(m_pConnection, sTableDbUpdates.c_str())) {
                 std::string sError2(mysql_error(m_pConnection));
-                WSJCppLog::throw_err(TAG, "Problem on create table updates " + sError2);
+                WsjcppLog::throw_err(TAG, "Problem on create table updates " + sError2);
             } else {
-                WSJCppLog::ok(TAG, "Table updates success created");
+                WsjcppLog::ok(TAG, "Table updates success created");
                 return vVersions;
             }
         } else {
-            WSJCppLog::throw_err(TAG, "Problem with database " + sError);
+            WsjcppLog::throw_err(TAG, "Problem with database " + sError);
         }
     } else {
         MYSQL_RES *pRes = mysql_use_result(m_pConnection);
@@ -128,7 +128,7 @@ bool MySqlStorageConnection::insertUpdateInfo(const std::string &sVersion, const
     std::string sInsertNewVersion = "INSERT INTO updates(version, description, datetime_update) "
         " VALUES(" + m_pStorage->prepareStringValue(sVersion) + ", " + m_pStorage->prepareStringValue(sDescription) + ",NOW());";
     if (mysql_query(m_pConnection, sInsertNewVersion.c_str())) {
-        WSJCppLog::err(TAG, "Could not insert row to updates: " + std::string(mysql_error(m_pConnection)));
+        WsjcppLog::err(TAG, "Could not insert row to updates: " + std::string(mysql_error(m_pConnection)));
         return false;
     }
     return true;
@@ -148,52 +148,52 @@ MySqlStorage::MySqlStorage() {
 // ----------------------------------------------------------------------
 
 bool MySqlStorage::applyConfigFromFile(const std::string &sFilePath) {
-    WJSCppParseConfig parseConfig(sFilePath);
+    WsjcppParseConf parseConfig(sFilePath);
     parseConfig.load();
 
     if (!parseConfig.has("dbhost")) {
-        WSJCppLog::err(TAG, "Not found 'dbhost' in " + sFilePath);
+        WsjcppLog::err(TAG, "Not found 'dbhost' in " + sFilePath);
         return false;
     }
 
     if (!parseConfig.has("dbport")) {
-        WSJCppLog::err(TAG, "Not found 'dbport' in " + sFilePath);
+        WsjcppLog::err(TAG, "Not found 'dbport' in " + sFilePath);
         return false;
     }
 
     if (!parseConfig.has("dbname")) {
-        WSJCppLog::err(TAG, "Not found 'dbname' in " + sFilePath);
+        WsjcppLog::err(TAG, "Not found 'dbname' in " + sFilePath);
         return false;
     }
 
     if (!parseConfig.has("dbuser")) {
-        WSJCppLog::err(TAG, "Not found 'dbuser' in " + sFilePath);
+        WsjcppLog::err(TAG, "Not found 'dbuser' in " + sFilePath);
         return false;
     }
 
     if (!parseConfig.has("dbpass")) {
-        WSJCppLog::err(TAG, "Not found 'dbpass' in " + sFilePath);
+        WsjcppLog::err(TAG, "Not found 'dbpass' in " + sFilePath);
         return false;
     }
 
-    m_sDatabaseHost = parseConfig.stringValue("dbhost", m_sDatabaseHost);
-    m_nDatabasePort = parseConfig.intValue("dbport", m_nDatabasePort);
-    m_sDatabaseName = parseConfig.stringValue("dbname", m_sDatabaseName);
-    m_sDatabaseUser = parseConfig.stringValue("dbuser", m_sDatabaseUser);
-    m_sDatabasePass = parseConfig.stringValue("dbpass", m_sDatabasePass);
+    m_sDatabaseHost = parseConfig.getStringValue("dbhost", m_sDatabaseHost);
+    m_nDatabasePort = parseConfig.getIntValue("dbport", m_nDatabasePort);
+    m_sDatabaseName = parseConfig.getStringValue("dbname", m_sDatabaseName);
+    m_sDatabaseUser = parseConfig.getStringValue("dbuser", m_sDatabaseUser);
+    m_sDatabasePass = parseConfig.getStringValue("dbpass", m_sDatabasePass);
 
-    WSJCppLog::info(TAG, "Database host: " + m_sDatabaseHost);
-    WSJCppLog::info(TAG, "Database port: " + std::to_string(m_nDatabasePort));
-    WSJCppLog::info(TAG, "Database name: " + m_sDatabaseName);
-    WSJCppLog::info(TAG, "Database user: " + m_sDatabaseUser);
-    WSJCppLog::info(TAG, "Database password: (hided)");
+    WsjcppLog::info(TAG, "Database host: " + m_sDatabaseHost);
+    WsjcppLog::info(TAG, "Database port: " + std::to_string(m_nDatabasePort));
+    WsjcppLog::info(TAG, "Database name: " + m_sDatabaseName);
+    WsjcppLog::info(TAG, "Database user: " + m_sDatabaseUser);
+    WsjcppLog::info(TAG, "Database password: (hided)");
 
     return true;
 }
 
 // ----------------------------------------------------------------------
 
-StorageConnection * MySqlStorage::connect() {
+WsjcppStorageConnection * MySqlStorage::connect() {
     MySqlStorageConnection *pConn = nullptr;
     MYSQL *pDatabase = mysql_init(NULL);
     if (!mysql_real_connect(pDatabase, 
@@ -202,8 +202,8 @@ StorageConnection * MySqlStorage::connect() {
             m_sDatabasePass.c_str(),
             m_sDatabaseName.c_str(), 
             m_nDatabasePort, NULL, 0)) {
-        WSJCppLog::err(TAG, "Connect error: " + std::string(mysql_error(pDatabase)));
-        WSJCppLog::err(TAG, "Failed to connect.");
+        WsjcppLog::err(TAG, "Connect error: " + std::string(mysql_error(pDatabase)));
+        WsjcppLog::err(TAG, "Failed to connect.");
     } else {
         pConn = new MySqlStorageConnection(pDatabase, this);
     }
@@ -307,28 +307,28 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(StorageStruct &storageS
 */
 // ----------------------------------------------------------------------
 
-std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageInsert &storageInsert) {
+std::vector<std::string> MySqlStorage::prepareSqlQueries(const WsjcppStorageInsert &storageInsert) {
     std::vector<std::string> vRet;
     std::string sSql = "";
     std::string sValues = "";
 
-    std::vector<StorageColumnValue> values = storageInsert.values();
+    std::vector<WsjcppStorageColumnValue> values = storageInsert.values();
     for (int i = 0; i < values.size(); i++) {
-        StorageColumnValue v = values[i];
+        WsjcppStorageColumnValue v = values[i];
         sSql += (sSql.length() > 0 ? ", " : "");
         sSql += v.getColumnName();
         sValues += (sValues.length() > 0 ? ", " : "");
         
-        if (v.getColumnType() == StorageColumnType::STRING) {
+        if (v.getColumnType() == WSJCPP_STORAGE_COLUMN_TYPE_STRING) {
             sValues += this->prepareStringValue(v.getString());
-        } else if (v.getColumnType() == StorageColumnType::DATETIME) {
+        } else if (v.getColumnType() == WSJCPP_STORAGE_COLUMN_TYPE_DATETIME) {
             sValues += this->prepareStringValue(v.getString());
-        } else if (v.getColumnType() == StorageColumnType::NUMBER) {
+        } else if (v.getColumnType() == WSJCPP_STORAGE_COLUMN_TYPE_NUMBER) {
             sValues += std::to_string(v.getInt());
-        } else if (v.getColumnType() == StorageColumnType::DOUBLE_NUMBER) {
+        } else if (v.getColumnType() == WSJCPP_STORAGE_COLUMN_TYPE_DOUBLE_NUMBER) {
             sValues += std::to_string(v.getDouble());
         } else {
-            WSJCppLog::err(TAG, "Unknown type " + std::to_string(v.getColumnType()));
+            WsjcppLog::err(TAG, "Unknown type " + std::to_string(v.getColumnType()));
         }
     }
     vRet.push_back("INSERT INTO " + storageInsert.getTableName() + "(" + sSql + ") VALUES(" + sValues + ");");
@@ -337,7 +337,7 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageInsert &st
 
 // ----------------------------------------------------------------------
 
-std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageCreateTable &storageCreateTable) {
+std::vector<std::string> MySqlStorage::prepareSqlQueries(const WsjcppStorageCreateTable &storageCreateTable) {
     std::vector<std::string> vRet;
     std::string sQuery = "";
     sQuery += "CREATE TABLE IF NOT EXISTS `" + storageCreateTable.getTableName() + "` (\r\n";
@@ -346,9 +346,9 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageCreateTabl
     std::vector<std::string> vCreateTableContentUniqueIndexes;
 
     // add columns
-    std::vector<StorageColumnDef> vColumns = storageCreateTable.getColumns();
+    std::vector<WsjcppStorageColumnDef> vColumns = storageCreateTable.getColumns();
     for (int i = 0; i < vColumns.size(); i++) {
-        StorageColumnDef c = vColumns[i];
+        WsjcppStorageColumnDef c = vColumns[i];
         vCreateTableContent.push_back(this->generateLineColumnForSql(c));
 
         // sQuery += "  " + generateLineColumnForSql(c) + ",\r\n";
@@ -405,7 +405,7 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageCreateTabl
 
 // ----------------------------------------------------------------------
 
-std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageModifyTable &storageModifyTable) {
+std::vector<std::string> MySqlStorage::prepareSqlQueries(const WsjcppStorageModifyTable &storageModifyTable) {
     std::vector<std::string> vRet;
 
     // drop columns
@@ -415,13 +415,13 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageModifyTabl
     }
 
     // add columns
-    std::vector<StorageColumnDef> vAddColumns = storageModifyTable.getAddColumns();
+    std::vector<WsjcppStorageColumnDef> vAddColumns = storageModifyTable.getAddColumns();
     for (int i = 0; i < vAddColumns.size(); i++) {
         vRet.push_back("ALTER TABLE `" + storageModifyTable.getTableName() + "` ADD COLUMN " + generateLineColumnForSql(vAddColumns[i]) + ";");
     }
 
     // alter columns
-    std::vector<StorageColumnDef> vAlterColumns = storageModifyTable.getAlterColumns();
+    std::vector<WsjcppStorageColumnDef> vAlterColumns = storageModifyTable.getAlterColumns();
     for (int i = 0; i < vAlterColumns.size(); i++) {
         vRet.push_back("ALTER TABLE `" + storageModifyTable.getTableName() + "` MODIFY " + generateLineColumnForSql(vAlterColumns[i]) + ";");
     }
@@ -430,9 +430,9 @@ std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageModifyTabl
 
 // ----------------------------------------------------------------------
 
-std::vector<std::string> MySqlStorage::prepareSqlQueries(const StorageDropTable &storageDropTable) {
+std::vector<std::string> MySqlStorage::prepareSqlQueries(const WsjcppStorageDropTable &storageDropTable) {
     if (!this->existsTable(storageDropTable.getTableName())) {
-        WSJCppLog::throw_err(TAG, "Table '" + storageDropTable.getTableName() + "' does not define previously");
+        WsjcppLog::throw_err(TAG, "Table '" + storageDropTable.getTableName() + "' does not define previously");
     }
     std::vector<std::string> vRet;
     vRet.push_back("DROP TABLE IF EXISTS `" + storageDropTable.getTableName() + "`;");
@@ -470,13 +470,15 @@ std::string MySqlStorage::prepareStringValue(const std::string &sValue) {
 
 // ----------------------------------------------------------------------
 
-std::string MySqlStorage::generateLineColumnForSql(StorageColumnDef &c) {
+std::string MySqlStorage::generateLineColumnForSql(WsjcppStorageColumnDef &c) {
     std::string sSqlColumn = "";
 
     sSqlColumn += "`" + c.columnName() + "`";
     
     if (c.columnType() == "number") {
         sSqlColumn += " INT";
+    } else if (c.columnType() == "bigNumber") {
+        sSqlColumn += " BIGINT";
     } else if (c.columnType() == "string") {
         sSqlColumn += " VARCHAR(" + std::to_string(c.columnTypeSize()) + ")";
     } else if (c.columnType() == "text") {
@@ -486,7 +488,7 @@ std::string MySqlStorage::generateLineColumnForSql(StorageColumnDef &c) {
     } else if (c.columnType() == "doubleNumber") {
         sSqlColumn += " DOUBLE";
     } else {
-        WSJCppLog::err(TAG, "Unknown columnType " + c.columnType());
+        WsjcppLog::err(TAG, "Unknown columnType " + c.columnType());
     }
 
     if (c.isNotNull()) {

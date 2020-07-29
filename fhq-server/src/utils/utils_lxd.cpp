@@ -1,17 +1,13 @@
 #include <utility>
-
-#include <utility>
-
 #include <utils_lxd.h>
 #include <json.hpp>
 #include <employ_orchestra.h>
-#include <wsjcpp_employees.h>
-
+#include <employees.h>
 
 bool UtilsLXDAuth::check_trust_certs(std::string &sError) {
     std::string sUrl = "/1.0";
     nlohmann::json jsonResponse;
-    EmployOrchestra *pOrchestra = findEmploy<EmployOrchestra>();
+    EmployOrchestra *pOrchestra = findWsjcppEmploy<EmployOrchestra>();
 
     if (!pOrchestra->initConnection()) {
         sError = "Can\'t connect to LXD server";
@@ -28,13 +24,13 @@ bool UtilsLXDAuth::connect_with_lxd(const std::string &sPass, std::string &sErro
     bool bTrusted = check_trust_certs(sError);
 
     if (!sError.empty()) {
-        WSJCppLog::err(std::string("UtilsLXDAuth"), "Can't get info about client cert");
+        WsjcppLog::err(std::string("UtilsLXDAuth"), "Can't get info about client cert");
         return false;
     }
 
     if (!bTrusted) {
         if (!set_trusted(sPass, sError)) {
-            WSJCppLog::err("UtilsLXDAuth", "Can't set trusted certs" + sError);
+            WsjcppLog::err("UtilsLXDAuth", "Can't set trusted certs" + sError);
         } else {
             bTrusted = true;
         }
@@ -52,7 +48,7 @@ bool UtilsLXDAuth::set_trusted(const std::string &sPass, std::string &sError) {
     })"_json;
     jsonData["password"] = sPass;
     nlohmann::json jsonResponse;
-    EmployOrchestra *pOrchestra = findEmploy<EmployOrchestra>();
+    EmployOrchestra *pOrchestra = findWsjcppEmploy<EmployOrchestra>();
 
     if (!pOrchestra->initConnection()) {
         sError = "Can\'t connect to LXD server";
